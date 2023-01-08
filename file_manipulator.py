@@ -1,5 +1,6 @@
 # 引数の入力が正しいかどうかをチェックするバリデータを必ず記述
 import sys
+import re
 
 
 args = sys.argv[1:]
@@ -12,15 +13,61 @@ def reverse_file_content(inputpath, outputpath):
     with open(outputpath, 'x') as f:
         f.write(reverse_text)
 
+def copy_file(inputpath, outputpath):
+    with open(inputpath, 'r') as f:
+        file = f.read()
+    with open(outputpath, 'x') as f:
+        f.write(file)
+
+def duplicate_contents(inputpath, n):
+    with open(inputpath, 'r') as f:
+        file = f.read()
+        temp = file
+    for i in range(int(n)):
+        with open(inputpath, 'w') as f:
+            f.write(temp + file)
+            temp += file
+
+def replace_string(inputpath, needle, newstring):
+    with open(inputpath, 'r') as f:
+        text = f.read()
+    replaced_string = re.sub(needle, newstring, text)
+    with open(inputpath, 'w') as f:
+        f.write(replaced_string)
+    
+
+
 # 引数の数を確認するバリデータ
-def validate_input_outputpath(argc):
-    if argc != 2:
+def validate_argc(option, argc):
+    if option != 'replace-string' and argc != 2:
         print("Error: Invalid number of arguments.")
-        print("Usage: python3 file_manipulator.py reverse arg1 arg2")
+        sys.exit(1)
+    if option == 'replace-string' and args != 3:
+        print("Error: Invalid number of arguments.")
+        sys.exit(1)
+
+def validate_duplicate_contents(n):
+    pattern = r"^[0-9]+$"
+    match = re.match(pattern, n)
+    if match == None:
+        print("Error: Enter a number for the second argument.")
         sys.exit(1)
 
 
 if (args[0] == 'reverse'):
-    print(argc)
-    validate_input_outputpath(argc)
+    validate_argc(args[0], argc)
     reverse_file_content(args[1], args[2])
+elif (args[0] == 'copy'):
+    validate_argc(args[0], argc)
+    copy_file(args[1], args[2])
+elif (args[0] == 'duplicate-contents'):
+    validate_argc(args[0], argc)
+    validate_duplicate_contents(args[2])
+    duplicate_contents(args[1], args[2])
+elif (args[0] == 'replace-string'):
+    validate_argc(args[0], argc)
+    replace_string(args[1], args[2], args[3])  
+else:
+    print("Error: Please specify the correct option.")
+    print("Hint: reverse | copy | duplicate-contents")
+    sys.exit(1)
