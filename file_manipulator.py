@@ -1,4 +1,3 @@
-# 引数の入力が正しいかどうかをチェックするバリデータを必ず記述
 import sys
 import re
 
@@ -46,6 +45,17 @@ def validate_argc(option, argc):
         print("Error: Invalid number of arguments.")
         sys.exit(1)
 
+# 拡張子を確認するバリデータ
+def validate_extension(inputfile, output=''):
+    if (not inputfile.endswith('.txt') and output == ''):
+        print('Error: The file extension is different.')
+        print("Hint: Specify the .txt file as the argument.")
+        sys.exit(1)
+    if(not inputfile.endswith('.txt') or not output.endswith('.txt')):
+        print('Error: The file extension is different.')
+        print("Hint: Specify the .txt file as the argument.")
+        sys.exit(1)
+
 def validate_duplicate_contents(n):
     pattern = r"^[0-9]+$"
     match = re.match(pattern, n)
@@ -54,18 +64,23 @@ def validate_duplicate_contents(n):
         sys.exit(1)
 
 
+
 if (args[0] == 'reverse'):
     validate_argc(args[0], argc)
+    validate_extension(args[1], args[2])
     reverse_file_content(args[1], args[2])
 elif (args[0] == 'copy'):
     validate_argc(args[0], argc)
+    validate_extension(args[1], args[2])
     copy_file(args[1], args[2])
 elif (args[0] == 'duplicate-contents'):
     validate_argc(args[0], argc)
     validate_duplicate_contents(args[2])
+    validate_extension(args[1])
     duplicate_contents(args[1], args[2])
 elif (args[0] == 'replace-string'):
     validate_argc(args[0], argc)
+    validate_extension(args[1])
     replace_string(args[1], args[2], args[3])  
 else:
     print("Error: Please specify the correct option.")

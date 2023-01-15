@@ -1,6 +1,6 @@
 # FileManipulatorProgram
 
-## オプション
+## 実行
 
 ### reverse
 
@@ -31,5 +31,5 @@ $ python3 file_manipulator.py duplicate-contents inputpath n
 inputpath にあるファイルの内容から文字列 'needle' を検索し、'needle' の全てを 'newstring' に置き換えます。
 
 ```bash
-$ python3 file_manipulator.py replace-string needle newstring
+$ python3 file_manipulator.py replace-string inputpath needle newstring
 ```
